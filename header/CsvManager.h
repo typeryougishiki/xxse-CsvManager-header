@@ -23,7 +23,7 @@ private:
 	}
 
 public:
-    static constexpr std::string_view BASE_CSV_DIR_PATH{ "./Data/SFSE/Plugins/WhatDoYouThinkWhenYouUseIt" };
+	static constexpr std::string_view BASE_CSV_DIR_PATH{ "./Data/" XXSE_CSV_MANAGER_XXSE_NAME "/Plugins/" XXSE_CSV_MANAGER_XXSE_PLUGIN_NAME };
 	inline CsvManager() {
 		std::filesystem::path base_csv_dir{ BASE_CSV_DIR_PATH };
 		if (!std::filesystem::exists(base_csv_dir)) {
