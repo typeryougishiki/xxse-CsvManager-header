@@ -8,18 +8,18 @@ set_encodings("utf-8")
 set_languages("c++23")
 
 add_requires("rapidcsv")
-
+includes("header")
 target("xxse-CsvManager-header")
     set_kind("headeronly")
     add_packages("rapidcsv")
-    add_headerfiles("CsvManager.h")
-    add_headerfiles("utils/*.h", {prefixdir = "utils"} )
+    add_headerfiles("header/CsvManager.h")
+    add_headerfiles("header/utils/*.h", {prefixdir = "utils"} )
 
 target("xxse-CsvManager-header-dev")
     set_kind("headeronly")
     add_packages("rapidcsv")
-    add_headerfiles("CsvManager.h")
-    add_headerfiles("utils/*.h", {prefixdir = "utils"})
+    add_headerfiles("header/CsvManager.h")
+    add_headerfiles("header/utils/*.h", {prefixdir = "utils"})
     local add_macro_var = function(name,value)
         add_defines(name.."="..value.."");
     end
