@@ -18,17 +18,16 @@ private:
     std::vector<std::string_view> configured_csv_names;
 	CsvManagerUse::str_key_allow_str_view_find_unordered<char>::map<std::vector<decltype(csv_table)::const_iterator>> prefix_indexs;
 	static void ExceptionWhenCsvNameNotConfigure(const std::string_view& p) {
-		XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Try to find csv '{}' which not be configured,failed", p);
-		throw std::out_of_range(std::format("Csv file path '{}' not configure ", p));
+		XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Try to find csv '{}' which not be configured,failed"sv, p);
+		throw std::out_of_range(std::format("Csv file path '{}' not configure "sv, p));
 	}
 
 public:
-	static constexpr std::string_view BASE_CSV_DIR_PATH{ "./Data/" XXSE_CSV_MANAGER_XXSE_NAME "/Plugins/" XXSE_CSV_MANAGER_XXSE_PLUGIN_NAME };
+	static constexpr std::string_view BASE_CSV_DIR_PATH{ "./Data/" XXSE_CSV_MANAGER_XXSE_NAME "/Plugins/" XXSE_CSV_MANAGER_XXSE_PLUGIN_NAME "/csv" };
 	inline CsvManager() {
 		std::filesystem::path base_csv_dir{ BASE_CSV_DIR_PATH };
 		if (!std::filesystem::exists(base_csv_dir)) {
-			std::filesystem::create_directories(base_csv_dir);
-			XXSE_CSV_MANAGER_LOGGER_NAMESPACE::warn("Csv store directory {} not found, create it.", base_csv_dir.string());
+			XXSE_CSV_MANAGER_LOGGER_NAMESPACE::warn("Csv store directory {} not found."sv, base_csv_dir.string());
 			return;
 		}
 		for (auto& file : std::filesystem::directory_iterator(base_csv_dir)) {
@@ -38,10 +37,10 @@ public:
 				auto csv_uptr = std::make_unique<rapidcsv::Document>(file.path().string());
 				auto p = this->csv_table.emplace(csv_name, std::move(csv_uptr));
 				this->configured_csv_names.emplace_back(p.first->first);
-				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::info("Configure csv {}", csv_name);
+				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::info("Configure csv {}"sv, csv_name);
 			}
 			catch (const std::iostream::failure& e) {
-				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::warn("Try to open file \"{}\" ,failed: {}", file.path().filename().string(), e.what());
+				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::warn("Try to open file \"{}\" ,failed: {}"sv, file.path().filename().string(), e.what());
 			}
 		}
 	};
@@ -58,8 +57,8 @@ public:
 				iter->second.reset(std::move(csv_uptr));
 			}
 			catch (const std::iostream::failure& e) {
-				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Try to reload file \"{}\" ,failed: {}", configured_csv_name, e.what());
-				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Old data of \"{}\" not change", configured_csv_name);
+				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Try to reload file \"{}\" ,failed: {}"sv, configured_csv_name, e.what());
+				XXSE_CSV_MANAGER_LOGGER_NAMESPACE::error("Old data of \"{}\" not change"sv, configured_csv_name);
 			}
 		}
 		else {
